@@ -58,6 +58,10 @@
 
 ### Application Continuum (Lab)
 
+-   Are you familiar with Multi-Module builds in either Gradle or Maven?
+    *Pal Tracker Distributed* project is a gradle multi-module build,
+    leveraging include files to keep level of redundancy to a minimum.
+
 -   Instead of using "curl" as following:
 
     ```bash
@@ -148,14 +152,24 @@
 -   Feel free to use the Postman *Eureka REST Endpoints* requests in
     place of `curl` or `httpie`.
 
+### Eureka Health Check Lab
+
+-   You may notice during the recovery of the Timesheets Server when
+    The actuator health indicator reports "UP", but Eureka has not yet
+    recovered from renewal.
+-   During this time Eureka Remote Status of Timesheets Server will
+    still report it as "DOWN", which will roll up the the Timesheets
+    Server aggregate status.
+    This will clear following the next Timesheets Server renewal.
+
 ### Ribbon Load Balancing
 
 -   Refer back to the Discovery Client lab challenge, where you use
     the `DiscoveryClient`?:
     How would you use the `LoadBalancerClient` API?
 
--   Consider using the Jmeter test in the scripts directory to exercise
-    your endpoint.
+-   Consider using the `scripts/DemonstrateLoadBalancing.jmx` Jmeter
+    test to exercise your endpoint.
 
 -   Be mindful of starting order of your apps:
     1. Eureka
@@ -177,6 +191,27 @@
 
 ## Fault Tolerance
 
+### Hystrix Circuit Breaker
+
+-   Note you no longer have Eureka Server and Service Discovery.
+    They are not necessary for using the Hystrix client.
+
+-   You are standing up Hystrix Dashboard as a Spring Boot application
+    from scratch.
+    So you will have to create `src/main/java` directory first before
+    creating
+    `io.pivotal.pal.tracker.hystrixdashboard.HystrixDashboardApp.java`
+
+-   Recommend to use the supplied `scripts/DemonstrateHystrix.jmx`
+    jmeter test plan to better demonstrate the circuit breaker.
+
+-   Idiosyncracies of Hystrix Dashboard:
+    -   You may get an error "Cannot connect to stream" when you first
+        access the timesheets server hystrix stream URL through the
+        dashboard, if you have not yet generated load.
+        Generate some load, and refresh the Hystrix Dashboard.
+    -   Beware the default sort order of Hystrix protected circuits
+
 ### Hystrix Isolation Strategies (Lab)
 
 -   In the JMeter, select HTTP Request, Advanced, Timeouts, and
@@ -197,6 +232,17 @@
     ```java
     applications/registration-server/src/main/io/pivotal/pal/tracker/registration/InstrumentedLatencyConfig.java
     ```
+
+-   Make sure to refresh you hystrix dashboard after switching the
+    timesheets server to `SEMAPHORE` mode and its restart.
+    Otherwise you will see the thread pool from previous default config
+    but no stats.
+
+-   Why are you overriding the `RestOperations` at the `TimesheetsApp`?
+    The `RestTemplateBuilder` is a Spring Boot dependency, ideally it
+    should not live in the component, but at the application.
+    This may raise design question of having a `rest-support` component,
+    but beyond the scope of this course.
 
 ### Hystrix Stats Aggregation (Lab - Optional)
 
