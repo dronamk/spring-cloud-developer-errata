@@ -1,0 +1,451 @@
+{
+	"info": {
+		"_postman_id": "91b6d8a5-a052-4f7d-937d-f6d2200bb4fa",
+		"name": "PAL-Tracker-Distributed-SCD-Local",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Tracker Time Entry Flow",
+			"item": [
+				{
+					"name": "Register New User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "44b740b6-f2ab-4102-bfd4-9206e1427525",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"userId\", jsonData.id);",
+									"",
+									"tests[\"userId is valid\"] = jsonData.userId !== null;",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0cdc779a-f5f2-444f-892b-a14ec14d21f4",
+								"exec": [
+									"var userNameSuffix = new Date().getTime()",
+									"var userName = postman.getEnvironmentVariable(\"userNamePrefix\") + \"-\" + userNameSuffix;",
+									"postman.setEnvironmentVariable(\"userName\",userName)",
+									"",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"{{userName}}\"}"
+						},
+						"url": {
+							"raw": "http://localhost:8083/registration",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"registration"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "22898cc2-729a-488c-9ac4-01d6a808be6f",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"userId is valid\"] = jsonData.userId !== null;",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dXNlcjpwYXNzd29yZA=="
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8083/users/{{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Accounts By Owner Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "99e62c1b-9beb-493e-bd18-6ac6ec5c2af9",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"accountId\", jsonData[0].id);",
+									"",
+									"tests[\"accountId is valid\"] = jsonData.accountId !== null;",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Basic dXNlcjpwYXNzd29yZA=="
+							}
+						],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8083/accounts?ownerId={{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"accounts"
+							],
+							"query": [
+								{
+									"key": "ownerId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Project",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "9c8998a2-8ea7-42ae-bcaa-df64895ef1a8",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"projectId\", jsonData.id);",
+									"",
+									"tests[\"projectId is valid\"] = jsonData.projectId !== null;",
+									"tests[\"Status code is 201\"] = responseCode.code === 201;"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "91be115d-3bd4-4e57-9c8d-8b2a32598e3c",
+								"exec": [
+									"var projectNameSuffix = new Date().getTime();",
+									"var projectName = postman.getEnvironmentVariable(\"projectNamePrefix\") + projectNameSuffix;",
+									"postman.setEnvironmentVariable(\"projectName\",projectName);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"name\": \"{{projectName}}\", \"accountId\": {{accountId}} }"
+						},
+						"url": {
+							"raw": "http://localhost:8083/projects",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Projects By Account Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "bef64a20-a517-4161-9b9b-e8d2e6be9f52",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"",
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8083/projects?accountId={{accountId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8083",
+							"path": [
+								"projects"
+							],
+							"query": [
+								{
+									"key": "accountId",
+									"value": "{{accountId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add New Time Entry",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "7be4977d-eda5-4b68-b2c4-f656a8b718cc",
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"timeEntryId\", jsonData.id);",
+									"",
+									"tests[\"timeEntryId is valid\"] = jsonData.timeEntryId !== null;",
+									"tests[\"Status code is 201\"] = responseCode.code === 201;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\"projectId\": {{projectId}}, \"userId\": {{userId}}, \"date\": \"2015-05-17\", \"hours\": 6}"
+						},
+						"url": {
+							"raw": "http://localhost:8084/time-entries",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"time-entries"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Time Entries By User Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"id": "5274d142-a23b-4971-9714-98e166ab7f61",
+								"exec": [
+									"tests[\"Status code is 200\"] = responseCode.code === 200;"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "http://localhost:8084/time-entries?userId={{userId}}",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"time-entries"
+							],
+							"query": [
+								{
+									"key": "userId",
+									"value": "{{userId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "cbbd4907-7ccc-4841-a03b-d565ebc0905f",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "41c8aa00-8168-493e-a13b-c3f53f401037",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Eureka REST Endpoints",
+			"item": [
+				{
+					"name": "Register Hello App",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"instance\": {\n        \"hostName\": \"localhost\",\n        \"app\": \"hello-world\",\n        \"ipAddr\": \"127.0.0.1\",\n        \"vipAddress\": \"hello-world\",\n        \"secureVipAddress\": \"hello-world\",\n        \"status\": \"UP\",\n        \"port\": {\n            \"$\": \"9000\",\n            \"@enabled\": \"true\"\n        },\n        \"securePort\": {\n            \"$\": \"9000\",\n            \"@enabled\": \"false\"\n        },\n        \"homePageUrl\": \"http://localhost:9000/\",\n        \"statusPageUrl\": \"http://localhost:9000/info\",\n        \"statusPageUrl\": \"http://localhost:9000/health\",\n        \"dataCenterInfo\": {\n            \"@class\": \"com.netflix.appinfo.InstanceInfo$DefaultDataCenterInfo\",\n            \"name\": \"MyOwn\"\n        }\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8761/eureka/apps/hello-world",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8761",
+							"path": [
+								"eureka",
+								"apps",
+								"hello-world"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Deregister Hello App",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8761/eureka/apps/hello-world/localhost",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8761",
+							"path": [
+								"eureka",
+								"apps",
+								"hello-world",
+								"localhost"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Eureka Health Check",
+			"item": [
+				{
+					"name": "Timesheets Actuator Healthcheck",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8084/health",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8084",
+							"path": [
+								"health"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}

@@ -73,8 +73,8 @@
     http post localhost:8084/time-entries projectId=1 userId=1 date=2015-05-17  hours=6
     ```
 
-    You may also use the supplied Postman collection downloaded with the
-    this errata site.
+    You may also use the supplied
+    [Postman collection](./scripts/PAL-Tracker-Distributed-SCD-Local.postman_collection.json)
     It is set for localhost, and there are different folders by lab.
     The *Timesheet Entry Flow* executes the flow and asserts the
     appropriate response codes.
