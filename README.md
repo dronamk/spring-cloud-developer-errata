@@ -12,8 +12,9 @@
 -   How many of you have been working on Java programming more than
     1 year, 3 years, 5 years?
 -   How many of you have worked with Spring, Spring Boot?
--   How many of you have worked with PAAS platforms such as Cloud
-    Foundry or Kubernetes?
+-   How many of you have worked with, or are currently working with PAAS
+    platforms such as Cloud Foundry or Kubernetes?
+    If you are currently working with one now, which one?
 -   What are your objectives for attending this class?
 
 ### Pairing
@@ -21,6 +22,7 @@
 - Pivotal encourages pairing.
 - Share knowledge with your pair.
 - Share knowledge with your team.
+- Communicate often, language barriers.
 
 ## Workshop Agenda
 
@@ -39,7 +41,20 @@
 -   Optionally setup a remote for your local code to push, if you want
     to save outside of class.
 
-## Service Discovery
+## Intro
+
+### Builds
+
+-   You are not building new functionality in this course.
+    The only code you will write will be to add *platform-services*.
+
+-   Builds are generally not required in this class.
+    For most labs, running Gradle `bootRun` is sufficient.
+
+-   Tests are not fully implemented on all the labs,
+    and some will fail if you attempt to run them or build the project.
+    If you attempt to run `./gradlew build` and it fails,
+    run `./gradlew assemble` instead.
 
 ### Application Continuum (Lab)
 
@@ -57,6 +72,8 @@
     You may also use the supplied Postman collection downloaded with the
     this errata site.
     It is set for localhost, and there are different folders by lab.
+    The *Timesheet Entry Flow* executes the flow and asserts the
+    appropriate response codes.
 
 -   If you are using Ultimate Edition IntelliJ or STS, you might as well take
     advantage of "Spring Boot Dashboard", which makes running multiple applications
@@ -65,6 +82,23 @@
 -   If you are a Windows user and decided to use "cmd" terminal window for
     running apps, you might consider to use [ConEMU](https://conemu.github.io/) instead
 
+### Spring Cloud Dependencies
+
+-   Look over the interfaces in `spring-cloud-commons` jar:
+    - Discovery
+    - Service Registry
+    - Load Balancer
+
+-   Maven Central used for the labs, but Enterprise customers will
+    leverage their own internal Maven Repository?
+
+-   What Maven repo product is your organization using?
+
+-   Are you running Docker containers?
+    If so, what repo do you consume your Container images?
+
+## Service Discovery
+
 ### Eureka Service Registry (Lab)
 
 -   You are standing up Eureka Server as a Spring Boot application from
@@ -72,9 +106,12 @@
     So you will have to create `src/main/java` directory first before
     creating `io.pivotal.pal.tracker.eurekaserver.EurekaServerApp.java`
 
-    Same for creating `application.yml`. You will have to create
-    `src/main/resources` directory first before creating `application.yml`
-    underneath it.
+    You will have to create `src/main/resources` directory first before
+    creating `application.yml` underneath it.
+    This is the only place we use YAML based application properties in
+    the course.
+    YAML maps are a better rendered format for Eureka replication
+    configurations.
 
 -   Unlike IntelliJ, Eclipse/STS will not display the
     mult-module project
@@ -100,22 +137,65 @@
 -   Note that there are three different ways to create discovery client
     -   Using `ServiceLocator` interface and `EurekaServiceLocator`
         implementation class (lab)
-    -   Using `DiscoveryClient` (challenge lab exercise)
-    -   Using `@LoadBalanced` annotation with `RestTemplate` (in the subsequent lab)
+    -   Using `DiscoveryClient` (challenge lab exercise) -> Make sure
+        you use the Spring Cloud `DiscoveryClient`, NOT the Netflix OSS
+        `DiscoveryClient`!
+    -   Using `@LoadBalanced` annotation with `RestTemplate` (in the
+        subsequent lab)
+
+### Eureka REST Client Lab
+
+-   Feel free to use the Postman *Eureka REST Endpoints* requests in
+    place of `curl` or `httpie`.
+
+### Ribbon Load Balancing
+
+-   Refer back to the Discovery Client lab challenge, where you use
+    the `DiscoveryClient`?:
+    How would you use the `LoadBalancerClient` API?
+
+-   Consider using the Jmeter test in the scripts directory to exercise
+    your endpoint.
+
+-   Be mindful of starting order of your apps:
+    1. Eureka
+    1. Registration Servers
+    1. Timesheet App
+
+-   Challenge for the Ribbon Load Balancing Labs:
+    Run 3 or 5 instances of `registration-server` with various
+    weightings, ramp up load rate to 5-10 requests per second and see
+    if the algorithm holds over several minutes of time.
+
+-   If you are running Client Load Balancing, Discovery in PCF, how does
+    this work?
+    Instructor show demo:
+    - Service Registry Tile (Eureka)
+    - Pivotal Spring Cloud Services Starters (Connector and Client)
+    - Zero client config through VCAP
+    - Container to Container networking
 
 ## Fault Tolerance
 
-### Hystrix Isolation Stratgies (Lab)
+### Hystrix Isolation Strategies (Lab)
 
--   In the JMeter, select HTTO Request, Advanced, Timeouts, and
+-   In the JMeter, select HTTP Request, Advanced, Timeouts, and
     set Connect and Response timeout to 1000 and 10000
 
 -   There is an comment error in the “application.properties” file
-    of the "timesheets-server". Leave the value as it is.
+    of the "timesheets-server".
+    Leave the value at 2000ms (2 seconds).
 
     ```properties
     # requests that take more than 5 seconds will “fail fast”:
     hystrix.command.default.execution.isolation.thread.timeoutInMilliseconds=2000
+    ```
+
+-   When instructed to review the instrumentation code, look at
+    following:
+
+    ```java
+    applications/registration-server/src/main/io/pivotal/pal/tracker/registration/InstrumentedLatencyConfig.java
     ```
 
 ### Hystrix Stats Aggregation (Lab - Optional)
@@ -139,8 +219,11 @@ can get it [here](./hystrix-demo)
 ### Vault Backend
 
 -   Verison 0.10.x introduces breaking changes.
-    Install an older compatible version from [https://releases.hashicorp.com/vault/0.9.6/](https://releases.hashicorp.com/vault/0.9.6/)
-    Choose the correct version for your OS, unzip the binary, and copy onto the path (e.g. /usr/local/bin)
+    Install an
+    [older compatible version](https://releases.hashicorp.com/vault/0.9.6/)
+    Choose the correct version for your OS, unzip the binary, and copy
+    onto the path (e.g. /usr/local/bin for *nix, or C:/Program Files
+    on Windows).
 
 ### Distributed Updates (lab - Optional)
 
