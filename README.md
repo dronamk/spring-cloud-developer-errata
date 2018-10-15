@@ -111,7 +111,7 @@
     So you will have to create `src/main/java` directory first before
     creating `io.pivotal.pal.tracker.eurekaserver.EurekaServerApp.java`
 
-    You will have to create `src/main/resources` directory first before
+    You will have to create `platform-services/eureka-server/src/main/resources` directory first before
     creating `application.yml` underneath it.
     This is the only place we use YAML based application properties in
     the course.
@@ -148,6 +148,33 @@
     -   Using `@LoadBalanced` annotation with `RestTemplate` (in the
         subsequent lab)
 
+### Service Discovery via Consul
+
+-   Install *consul*
+
+    -   Mac:
+
+        ```bash
+        brew install consul
+
+        To have launchd start consul now and restart at login:
+
+        `brew services start consul`
+
+        Or, if you don't want/need a background service you can j
+        just run:
+
+        `consul agent -dev -advertise 127.0.0.1`
+        ```
+
+-   Switch `applications/server.gradle` discovery client dependency:
+
+    `compile 'org.springframework.cloud:spring-cloud-starter-eureka'`
+
+    to
+
+    `compile 'org.springframework.cloud:spring-cloud-starter-consul-discovery'`
+
 ### Eureka REST Client Lab
 
 -   Feel free to use the Postman *Eureka REST Endpoints* requests in
@@ -162,6 +189,51 @@
     still report it as "DOWN", which will roll up the the Timesheets
     Server aggregate status.
     This will clear following the next Timesheets Server renewal.
+
+### Eureka Peer Replication
+
+See
+[Spring Cloud Netflix Eureka documentation](http://cloud.spring.io/spring-cloud-netflix/single/spring-cloud-netflix.html#spring-cloud-eureka-server-peer-awareness)
+
+and
+[Netflix Eureka Peer Replication](https://github.com/Netflix/eureka/wiki/Understanding-Eureka-Peer-to-Peer-Communication)
+
+### Eureka Availability Zone
+
+Some Sample Eureka Server Configuration (of server running in zone1):
+
+```properties
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    region: us-east-region
+    service-url:
+      zone1: http://127.0.0.1:8761/eureka/
+      zone2: http://127.0.0.1:8762/eureka/
+    availability-zones:
+      us-east-region: zone1,zone2
+
+spring.profiles.active: zone1
+```
+
+Sample client configuration:
+
+```properties
+eureka:
+  client:
+    prefer-same-zone-eureka: true
+    region: us-east-region
+    service-url:
+      zone1: http://127.0.0.1:8761/eureka/
+      zone2: http://127.0.0.1:8762/eureka/
+    availability-zones:
+      us-east-region: zone1,zone2
+
+spring:
+  profiles.active: zone1
+  application.name: {some app name}
+```
 
 ### Ribbon Load Balancing
 
@@ -254,6 +326,21 @@
 If you are interested in experimenting with the hystrix demo code, you
 can get it [here](./hystrix-demo)
 
+## Config Server
+
+-   Consider hardcoding ${HOME} in config git report local URL to
+    literal absolute path.
+
+-   In your `registration-server` and `timesheets-server` applications,
+    configure the config server endpoint:
+
+    ```properties
+    spring.cloud.config.uri=http://localhost:8888
+    ```
+
+-   Registration URL is not required in the `registration-server`
+    `application.properties`
+
 ## Config Server and Spring Cloud Bus
 
 -   See the [Spring Cloud Bus documentation](http://cloud.spring.io/spring-cloud-static/spring-cloud-bus/2.0.0.RELEASE/single/spring-cloud-bus.html)
@@ -265,12 +352,23 @@ can get it [here](./hystrix-demo)
 
 ### Vault Backend
 
--   Verison 0.10.x introduces breaking changes.
+-   Version 0.10.x introduces breaking changes.
     Install an
     [older compatible version](https://releases.hashicorp.com/vault/0.9.6/)
     Choose the correct version for your OS, unzip the binary, and copy
     onto the path (e.g. /usr/local/bin for *nix, or C:/Program Files
     on Windows).
+
+-   Add the following to config server configuration to demonstrate
+    endpoint url:
+
+    ```properties
+    spring.cloud.config.server.vault.host=127.0.0.1
+    spring.cloud.config.server.vault.port=8200
+    ```
+
+    See here for more
+    [vault config info](https://cloud.spring.io/spring-cloud-config/multi/multi__spring_cloud_config_server.html#vault-backend)
 
 ### Distributed Updates (lab - Optional)
 
