@@ -29,7 +29,6 @@
 - Class starts at 9AM and ends at 5PM
 - Two 15 minutes breaks, one in the morning and one in the afternoon
 - Lunch is 1 hour around noon
-- [Course Site](https://courses.education.pivotal.io/c/349802743/)
 
 ## Review Prequisites
 
