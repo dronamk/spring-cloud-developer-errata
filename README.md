@@ -78,6 +78,8 @@
     It is set for localhost, and there are different folders by lab.
     The *Timesheet Entry Flow* executes the flow and asserts the
     appropriate response codes.
+    The collection is implemention on API version 2.1, it is recommended
+    to use Postman version 6.4.x or above.
 
 -   If you are using Ultimate Edition IntelliJ or STS, you might as well take
     advantage of "Spring Boot Dashboard", which makes running multiple applications
