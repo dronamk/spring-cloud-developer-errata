@@ -156,15 +156,19 @@
 
         ```bash
         brew install consul
+        ```
 
         To have launchd start consul now and restart at login:
 
-        `brew services start consul`
+        ```bash
+        brew services start consul
+        ```
 
         Or, if you don't want/need a background service you can j
         just run:
 
-        `consul agent -dev -advertise 127.0.0.1`
+        ```bash
+        consul agent -dev -advertise 127.0.0.1
         ```
 
 -   Switch `applications/server.gradle` discovery client dependency:
