@@ -403,6 +403,20 @@ can get it [here](./hystrix-demo)
 
 ## Additional Topics
 
+### Feign
+
+-   Remember how to add discovery to applications?
+    The `timesheets-server` and `registration-server` applications are
+    not set up for Discovery.
+    You must add the following:
+
+    -   You must add the
+        `compile "org.springframework.cloud:spring-cloud-starter-eureka"`
+        starter to the `applications/server.gradle` dependencies.
+
+    -   In apps you must annotate your spring boot apps with
+        `@EnableDiscoveryClient`.
+
 ### Distributed Trace - Zipkin (Lab - Optional)
 
 -   The document says the following:
@@ -424,3 +438,10 @@ can get it [here](./hystrix-demo)
     curl -sSL https://zipkin.io/quickstart.sh | bash -s
     java -jar zipkin.jar
     ```
+
+## Security with Oauth2
+
+-   The
+    [supplied Postman collection](./scripts/PAL-Tracker-Distributed-SCD-Local.postman_collection.json)
+    provides a flow for registration and timesheets that generates an
+    oauth token, and uses it in the flow.
