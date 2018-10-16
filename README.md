@@ -239,11 +239,21 @@ spring:
   application.name: {some app name}
 ```
 
-### Ribbon Load Balancing
+### Implementing Ribbon Load Balancing
+
+-   Wrap up "You provided a simplified way to do service discovery with
+    the"
+
+    should be:
+
+    "You provided a simplified way to do service discovery with the
+    `@LoadBalanced` client proxy".
 
 -   Refer back to the Discovery Client lab challenge, where you use
-    the `DiscoveryClient`?:
+    the `DiscoveryClient`:
     How would you use the `LoadBalancerClient` API?
+
+### Ribbon Load Balancing in action
 
 -   Consider using the `scripts/DemonstrateLoadBalancing.jmx` Jmeter
     test to exercise your endpoint.
@@ -256,7 +266,7 @@ spring:
 -   Challenge for the Ribbon Load Balancing Labs:
     Run 3 or 5 instances of `registration-server` with various
     weightings, ramp up load rate to 5-10 requests per second and see
-    if the algorithm holds over several minutes of time.
+    if the weighted algorithm holds over several minutes of time.
 
 -   If you are running Client Load Balancing, Discovery in PCF, how does
     this work?
