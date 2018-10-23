@@ -210,7 +210,6 @@
 -   Consider adding `enableSelfPreservation`: false - the lab is a little messy because registrations will never expire.  
     This is because Eureka gets paranoid when >75% of registrations are not renewed (it assumes a network outage occurred).
 
-
 ### Eureka Health Check Lab
 
 -   You may notice during the recovery of the Timesheets Server when
@@ -325,6 +324,9 @@ spring:
         dashboard, if you have not yet generated load.
         Generate some load, and refresh the Hystrix Dashboard.
     -   Beware the default sort order of Hystrix protected circuits
+
+-   We instrument hystrix over core domain logic.  
+    Ideally this should be app level concern, with proxy to core domain logic, and fall back.
 
 ### Hystrix Isolation Strategies (Lab)
 
