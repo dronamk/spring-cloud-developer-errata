@@ -106,7 +106,9 @@
     ```bash
     ./gradlew dependencies --configuration compile
     ```
-
+-   How would you remove Jersey from your Spring Cloud Netflix Eureka clients?
+    See *Discovery Clients*.
+    
 -   Maven Central used for the labs, but Enterprise customers will
     leverage their own internal Maven Repository?
 
@@ -160,6 +162,8 @@
         `DiscoveryClient`!
     -   Using `@LoadBalanced` annotation with `RestTemplate` (in the
         subsequent lab)
+
+-   You can also [remove use of Jersey](https://cloud.spring.io/spring-cloud-netflix/multi/multi__service_discovery_eureka_clients.html#_eurekaclient_without_jersey)
 
 ### Service Discovery via Consul
 
