@@ -92,6 +92,8 @@
 -   If you are a Windows user and decided to use "cmd" terminal window for
     running apps, you might consider to use [ConEMU](https://conemu.github.io/) instead
 
+-   `registration.server.endpoint` IS NOT required for the `registration-server`, remove it!
+
 ### Spring Cloud Dependencies
 
 -   Look over the interfaces in `spring-cloud-commons` jar:
