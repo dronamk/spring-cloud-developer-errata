@@ -212,6 +212,8 @@
 -   Consider adding `enableSelfPreservation`: false - the lab is a little messy because registrations will never expire.  
     This is because Eureka gets paranoid when >75% of registrations are not renewed (it assumes a network outage occurred).
 
+-   [Description of renews vs renews threshold](https://stackoverflow.com/questions/39032741/what-does-renews-and-renews-threshold-mean-in-eureka)
+
 ### Eureka Health Check Lab
 
 -   You may notice during the recovery of the Timesheets Server when
@@ -364,7 +366,10 @@ spring:
 
 ### Hystrix Stats Aggregation (Lab - Optional)
 
-- The command to start RabbitMQ is "rabbitmq-server".
+-   The command to start RabbitMQ is "rabbitmq-server".
+
+-   [Hystrix Dashboard is no longer supported](https://github.com/Netflix/security-bulletins/blob/master/advisories/nflx-2018-001.md)
+
 
 ### Hystrix Demo
 
