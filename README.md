@@ -378,6 +378,10 @@ can get it [here](./hystrix-demo)
 
 ## Config Server
 
+-   Typo - change text to match package name in code: 
+    `io.pivotal.pal.tracker.configserver.ConfigServerApp` to 
+    `io.pal.pivotal.configserver.ConfigServerApp`
+
 -   Consider hardcoding ${HOME} in config git report local URL to
     literal absolute path.
 
@@ -388,8 +392,8 @@ can get it [here](./hystrix-demo)
     spring.cloud.config.uri=http://localhost:8888
     ```
 
--   Registration URL is not required in the `registration-server`
-    `application.properties`
+-   Registration URL is not required in the classpath `registration-server`
+    `application.properties`, remove it.
 
 ## Config Server and Spring Cloud Bus
 
