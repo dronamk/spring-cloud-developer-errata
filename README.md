@@ -200,6 +200,16 @@
 
 -   Feel free to use the Postman *Eureka REST Endpoints* requests in
     place of `curl` or `httpie`.
+    
+-   REST Operations lab should set logging level to DEBUG so we can see the example output in the lab.
+
+-   REST Operations - for non-spring apps, what’s the syntax for the heartbeat/renewal?
+
+-   "Launch the registration service" should be "Launch the registration server".
+
+-   Consider adding `enableSelfPreservation`: false - the lab is a little messy because registrations will never expire.  
+    This is because Eureka gets paranoid when >75% of registrations are not renewed (it assumes a network outage occurred).
+
 
 ### Eureka Health Check Lab
 
