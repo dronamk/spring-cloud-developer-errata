@@ -101,6 +101,12 @@
     
 -   If you are running on PCF SCS, you will also need to verify [SCS tile, client and Spring Cloud dependencies](https://docs.pivotal.io/spring-cloud-services/2-0/common/client-dependencies.html)
 
+-   You can filter dependencies scope by adding the `--configuration <scope>` to the gradle `dependencies` task.
+
+    ```bash
+    ./gradlew dependencies --configuration compile
+    ```
+
 -   Maven Central used for the labs, but Enterprise customers will
     leverage their own internal Maven Repository?
 
