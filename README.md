@@ -32,7 +32,7 @@
 
 ## Review Prequisites
 
--   [Review lab setup guide](https://courses.education.pivotal.io/c/349802743/spring-cloud-developer/setup/index.html)
+-   Review lab setup guide
 -   Review all students have necessary prereqs.
 -   There are places in the course where explicit *nix commands are
     given.
@@ -41,6 +41,11 @@
     to save outside of class.
 
 ## Intro
+
+-   Code bases are supplies as local git repos packages as zip files.
+    You may do whatever you want with these:
+    -   Run on your local workstation, throw away when you are done with it.
+    -   Set a remote on Bitbucket or Github, and save your changes remotely.
 
 ### Builds
 
