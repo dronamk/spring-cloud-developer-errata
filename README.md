@@ -441,11 +441,13 @@ can get it [here](./hystrix-demo)
     rabbitmq-plugins enable rabbitmq_tracing
     ```
     
--   You should consider filtering applications in a bus refresh, 
+-   You should consider 
+    [filtering applications in a bus refresh](http://cloud.spring.io/spring-cloud-static/spring-cloud-bus/1.3.4.RELEASE/single/spring-cloud-bus.html#_addressing_all_instances_of_a_service), 
     otherwise *all* instances of *all* applications will be targeted
     for a refresh event.
     This could have significant performance concerns in a large
     scale application.
+    
 
 ## Additional Topics
 
