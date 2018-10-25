@@ -440,6 +440,12 @@ can get it [here](./hystrix-demo)
     rabbitmq-plugins enable rabbitmq_management
     rabbitmq-plugins enable rabbitmq_tracing
     ```
+    
+-   You should consider filtering applications in a bus refresh, 
+    otherwise *all* instances of *all* applications will be targeted
+    for a refresh event.
+    This could have significant performance concerns in a large
+    scale application.
 
 ## Additional Topics
 
